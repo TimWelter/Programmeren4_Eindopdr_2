@@ -20,7 +20,7 @@ module.exports = {
      * @param {*} next ApiError when token is invalid, or req containing logged-in user.
      */
     validateToken(req, res, next) {
-        // console.log('validateToken called')
+        console.log('validateToken called')
 
         /**
          * A token can be sent in the body of a request, via a query parameter (in the URL),
