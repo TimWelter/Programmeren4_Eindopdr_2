@@ -13,7 +13,7 @@ module.exports = {
             assert(typeof (req.body.naam) === 'string', 'naam must be a string.')
             assert(typeof (req.body.beschrijving) === 'string', 'beschrijving must be a string.')
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 500)
+            const error = new ApiError(ex.toString(), 422)
             next(error)
             return
         }
