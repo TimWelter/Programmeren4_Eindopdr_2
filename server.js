@@ -7,7 +7,7 @@ const sharer_routes = require('./routes/sharer.routes')
 const stuff_routes = require('./routes/stuff.routes')
 // const authController = require('./controllers/authentication.controller')
 const ApiError = require('./models/ApiError')
-const settings = require('./config/config.js')
+const settings = require('./config/config')
 
 const port = settings.webPort
 

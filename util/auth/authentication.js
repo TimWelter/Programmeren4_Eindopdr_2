@@ -15,7 +15,7 @@ function encodeToken(data) {
         iat: moment().unix(),
         sub: data   // can be any value or object you choose! 
     }
-    return jwt.encode(playload, settings.secretkey)
+    return jwt.encode(playload, settings.secretKey)
 }
 
 //
