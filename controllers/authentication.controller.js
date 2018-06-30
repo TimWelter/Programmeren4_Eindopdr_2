@@ -46,6 +46,8 @@ module.exports = {
                  * In this way, every next express handler has access to it - and could do 
                  * something smart with it.  
                  */
+
+                console.log("PAYLOAD:" + payload.sub)
                 req.user = payload.sub
                 next()
             }
@@ -141,12 +143,12 @@ module.exports = {
                     values: [registerInfo.getFirstName(), registerInfo.getLastName(), registerInfo.getEmail(), registerInfo.getPassword()]
                 }
                 db.query(query, (error, rows) => {
-                        if (error) {
-                            next(new ApiError(error, 401))
-                        } else {
-                            console.log("added user")
-                        }
-                    })
+                    if (error) {
+                        next(new ApiError(error, 401))
+                    } else {
+                        console.log("added user")
+                    }
+                })
 
 
                 // Unique email person was added to the list.
@@ -155,16 +157,33 @@ module.exports = {
                 // - return valid token, user is immediately logged in.
 
                 // Create an object containing the data we want in the payload.
-                const payload = {
-                    user: registerInfo.getEmail(),
-                    role: 'spullendelenuser'
+                const query2 = {
+                    sql: 'SELECT * FROM user WHERE Email = ?',
+                    values: [registerInfo.getEmail()]
                 }
-                // Userinfo returned to the caller.
-                const userInfo = {
-                    token: auth.encodeToken(payload),
-                    email: registerInfo.getEmail()
-                }
-                res.status(200).json(userInfo).end()
+                let payload
+                db.query(query2, (error, result) => {
+                    if (error) {
+                        next(new ApiError(error, 401))
+                    } else {
+
+                        payload = {
+                            user: registerInfo.getEmail(),
+                            role: 'spullendelenuser',
+                            id: result[0].ID,
+                            name: result[0].Voornaam + " " + result[0].Achternaam
+                        }
+
+                        // Userinfo returned to the caller.
+                        const userInfo = {
+                            token: auth.encodeToken(payload),
+                            email: registerInfo.getEmail()
+                        }
+                        res.status(200).json(userInfo).end()
+                    }
+                })
+
+
 
             } else {
                 res.status(409)
