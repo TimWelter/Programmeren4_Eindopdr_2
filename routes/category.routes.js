@@ -7,7 +7,7 @@ routes.get('/category', categoryController.getAllCategories)
 routes.get('/category/:IDCategory', categoryController.getCategoryByID)
 
 //Posting a new category
-routes.post('/category', categoryController.addCategory)
+routes.post('/category', categoryController.addCategor)
 
 //Deleting a category
 routes.delete('/category/:IDCategory', categoryController.deleteCategoryByID)
