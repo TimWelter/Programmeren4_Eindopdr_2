@@ -1,5 +1,5 @@
 const express = require('express')
-const morgan = requre('morgan')
+const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const auth_routes = require('./routes/auth.routes')
 const category_routes = require('./routes/category.routes')
@@ -7,7 +7,7 @@ const sharer_routes = require('./routes/sharer.routes')
 const stuff_routes = require('./routes/stuff.routes')
 const authController = require('./controllers/authentication.controller')
 const ApiError = require('./models/ApiError')
-const settings = require('./config/config.json')
+const settings = require('./config/config')
 
 const port = settings.webPort
 

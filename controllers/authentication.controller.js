@@ -1,5 +1,4 @@
 const assert = require('assert')
-const loginInfo
 const ApiError = require('../models/ApiError')
 const db = require('../config/db')
 const auth = require('../util/auth/authentication')
@@ -125,8 +124,8 @@ module.exports = {
         try {
             registerInfo = new UserRegister(req.body.firstname, req.body.lastname, req.body.email, req.body.password)
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 412)
-            res.status(412)
+            const error = new ApiError(ex.message, ex.code)
+            res.status(422)
             next(error)
             return
         }
@@ -157,7 +156,7 @@ module.exports = {
 
                 // Create an object containing the data we want in the payload.
                 const payload = {
-                    user: req.body.email,
+                    user: registerInfo.getEmail(),
                     role: 'spullendelenuser'
                 }
                 // Userinfo returned to the caller.
