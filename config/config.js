@@ -3,5 +3,6 @@ module.exports = {
     "dbHost": "localhost",
     "dbUser": "spullendelenuser",
     "dbDatabase": "spullendelen",
-    "dbPassword": "secret"
+    "dbPassword": "secret",
+    "secretKey": "geheimpje"
 }
