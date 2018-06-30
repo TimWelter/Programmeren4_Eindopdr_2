@@ -34,3 +34,6 @@ class UserRegister {
     getPassword() {
         return this.password
     }
+}
+
+module.exports = UserRegister
