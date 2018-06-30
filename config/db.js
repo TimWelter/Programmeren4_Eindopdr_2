@@ -11,7 +11,7 @@ const connectionSettings = {
 
     host: config.dbHost,
     user: config.dbUser,
-    password: config.secretkey,
+    password: config.dbPassword,
     database: config.dbDatabase,
     port: 3306,
     debug: false

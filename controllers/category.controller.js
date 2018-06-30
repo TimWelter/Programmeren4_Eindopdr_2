@@ -1,4 +1,4 @@
-const ApiError = require('../model/ApiError')
+const ApiError = require('../models/ApiError')
 const assert = require('assert')
 const db = require('../config/db')
 
