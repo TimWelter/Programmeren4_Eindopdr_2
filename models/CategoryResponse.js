@@ -1,4 +1,4 @@
-class CategooryResponse {
+class CategoryResponse {
     constructor(ID, name, description, owner, email) {
         this.ID = ID
         this.name = name
@@ -19,4 +19,4 @@ class CategooryResponse {
     }
 }
  
-    module.exports = StuffResponse
+    module.exports = CategoryResponse
