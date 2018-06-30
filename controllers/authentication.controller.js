@@ -155,10 +155,22 @@ module.exports = {
                 // - return valid token, user is immediately logged in.
 
                 // Create an object containing the data we want in the payload.
-                const payload = {
-                    user: registerInfo.getEmail(),
-                    role: 'spullendelenuser'
+                const query = {
+                    sql: 'SELECT ID FROM user WHERE Email = ?',
+                    values: [registerInfo.getEmail()]
                 }
+                db.query(query, (error, result) => {
+                    if(error) {
+                        next(new ApiError(error, 401))
+                    } else {
+                    const payload = {
+                        user: registerInfo.getEmail(),
+                        role: 'spullendelenuser',
+                        id: result[0].ID
+                    }
+                    }
+                })
+                
                 // Userinfo returned to the caller.
                 const userInfo = {
                     token: auth.encodeToken(payload),

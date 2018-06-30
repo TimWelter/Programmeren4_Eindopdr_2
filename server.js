@@ -22,7 +22,7 @@ app.use('*', function(req, res, next){
 })
 
 app.use('/api', auth_routes)
-// app.all('/api', authController.validateToken);
+app.all('/api', authController.validateToken)
 app.use('/api', category_routes)
 app.use('/api', sharer_routes)
 app.use('/api', stuff_routes)
