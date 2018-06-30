@@ -23,3 +23,5 @@ class UserLogin {
         return this.password
     }
 }
+
+module.exports = UserLogin
