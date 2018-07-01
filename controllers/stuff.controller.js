@@ -27,10 +27,11 @@ module.exports = {
                             const error = new ApiError(err.toString(), 412)
                             next(error);
                         } else {
-                            stuffResponse = new StuffResponse(rows.insertedId, stuff.getName(), stuff.getDescription(), stuff.getBrand(), stuff.getKind(), stuff.getYear())
-                            res.status(200).json(
-                                stuffResponse.getResponse()
-                            ).end()
+                            // stuffResponse = new StuffResponse(rows.insertedId, stuff.getName(), stuff.getDescription(), stuff.getBrand(), stuff.getKind(), stuff.getYear())
+                            res.status(200).json({
+                                result: rows
+                                // stuffResponse.getResponse()
+                            }).end()
                         }
                     })
         } catch (ex) {
