@@ -76,7 +76,7 @@ module.exports = {
                         const error = new ApiError(err, 412)
                         next(error);
                     } else if(rows.length < 1) {
-                        const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet)', 404)
+                        const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet of er zijn geen delers gevonden)', 404)
                         next(error)
                     } else {
                         res.status(200).json({
@@ -112,7 +112,7 @@ module.exports = {
                         // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
                             // zo nee, dan error 
-                            const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet)', 404)
+                            const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet of er zijn geen delers gevonden)', 404)
                             next(error);
                         } else {
                             // zo ja, dan
