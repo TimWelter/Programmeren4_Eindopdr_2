@@ -153,13 +153,151 @@ describe('Add a category', () => {
       })
 
   })
+  it('should throw error 422 when naam has an invalid type', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'naam': 12345,
+        'beschrijving': 'Deze categorie is gemaakt door de test'
+    })
+      .end((err, res) => {
+        res.should.have.status(422)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(422)
+        error.should.have.property('datetime')
+        done()
+      })
 
+  })
+  it('should throw error 422 when beschrijving has an invalid type', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'naam': "testCategorie",
+        'beschrijving': 12345
+    })
+      .end((err, res) => {
+        res.should.have.status(422)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(422)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw error 422 when naam and beschrijving have an invalid type', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'naam': 12345,
+        'beschrijving': 12345
+    })
+      .end((err, res) => {
+        res.should.have.status(422)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(422)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+})
+describe('Edit a category', () => {
+  it('should throw 401 when no token is provided', (done) => {
+    chai.request(server)
+      .put(endpoint)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw 401 when a wrong token is provided', (done) => {
+    chai.request(server)
+      .put(endpoint)
+      .set('x-access-token', wrongToken)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
+        (err, rows, fields) => {
+            if (err) {
+              
+                const error = new ApiError(err, 412)
+                next(error);
+            } else {
+               let categoryToBeEdited = rows[0]
+               let IdToBeEdited = categoryToBeEdited.ID
+
+               chai.request(server)
+               .put(endpoint+"/"+IdToBeEdited)
+               .set('x-access-token', token)
+               .send({
+                'naam': "testCategorieAangepast",
+                'beschrijving': "Deze categorie is aangepast door de test"
+               })
+               .end((err, res) => {
+                 res.should.have.status(200)
+                 res.body.should.be.a('object')
+                 done()
+               })
+            }
+        })
+})
+  
 })
 describe('Delete a category', () => {
+  it('should throw 401 when no token is provided', (done) => {
+    chai.request(server)
+      .delete(endpoint)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw 401 when a wrong token is provided', (done) => {
+    chai.request(server)
+      .delete(endpoint)
+      .set('x-access-token', wrongToken)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+
   it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
       db.query('SELECT * FROM categorie ORDER BY ID DESC',
           (err, rows, fields) => {
               if (err) {
+                
                   const error = new ApiError(err, 412)
                   next(error);
               } else {
@@ -177,4 +315,19 @@ describe('Delete a category', () => {
               }
           })
   })
+  it('should return status 404 when an invalid ID was provided', (done) => {
+    chai.request(server)
+      .delete(endpoint + "/99999")
+      .set('x-access-token', token)
+      .end((err, res) => {
+        res.should.have.status(404)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(404)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+
 })
