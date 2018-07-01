@@ -76,6 +76,9 @@ module.exports = {
                     if (err) {
                         const error = new ApiError(err, 412)
                         next(error);
+                    } else if(rows.length === 0) {
+                        const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet)', 404)
+                        next(error)
                     } else {
                         res.status(200).json(
                             rows[0]
