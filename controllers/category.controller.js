@@ -26,10 +26,10 @@ module.exports = {
                         const error = new ApiError(err.toString(), 412)
                         next(error);
                     } else {
-                        let categoryResponse = new CategoryResponse(rows[0].insertedId, category.getName(), category.getDescription(), req.user.name, req.user.user)
-                        res.status(200).json({
-                            status: rows
-                        }).end()
+                        let categoryResponse = new CategoryResponse(rows.insertId, category.getName(), category.getDescription(), req.user.name, req.user.user)
+                        res.status(200).json(
+                            categoryResponse.getResponse()
+                        ).end()
                     }
                 })
         } catch (ex) {
