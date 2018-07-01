@@ -153,7 +153,7 @@ describe('Add a category', () => {
       })
 
   })
-  it('should throw error 422 when naam has an invalid type', (done) => {
+  it('should throw error 412 when naam has an invalid type', (done) => {
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -162,16 +162,16 @@ describe('Add a category', () => {
         'beschrijving': 'Deze categorie is gemaakt door de test'
     })
       .end((err, res) => {
-        res.should.have.status(422)
+        res.should.have.status(412)
         const error = res.body
         error.should.have.property('message')
-        error.should.have.property('code').equals(422)
+        error.should.have.property('code').equals(412)
         error.should.have.property('datetime')
         done()
       })
 
   })
-  it('should throw error 422 when beschrijving has an invalid type', (done) => {
+  it('should throw error 412 when beschrijving has an invalid type', (done) => {
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -180,16 +180,16 @@ describe('Add a category', () => {
         'beschrijving': 12345
     })
       .end((err, res) => {
-        res.should.have.status(422)
+        res.should.have.status(412)
         const error = res.body
         error.should.have.property('message')
-        error.should.have.property('code').equals(422)
+        error.should.have.property('code').equals(412)
         error.should.have.property('datetime')
         done()
       })
 
   })
-  it('should throw error 422 when naam and beschrijving have an invalid type', (done) => {
+  it('should throw error 412 when naam and beschrijving have an invalid type', (done) => {
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -198,10 +198,60 @@ describe('Add a category', () => {
         'beschrijving': 12345
     })
       .end((err, res) => {
-        res.should.have.status(422)
+        res.should.have.status(412)
         const error = res.body
         error.should.have.property('message')
-        error.should.have.property('code').equals(422)
+        error.should.have.property('code').equals(412)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw error 412 when naam is non-existent', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'beschrijving': 'Deze categorie is gemaakt door de test'
+    })
+      .end((err, res) => {
+        res.should.have.status(412)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(412)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw error 412 when beschrijving is non-existent', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'naam': "testCategorie"
+    })
+      .end((err, res) => {
+        res.should.have.status(412)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(412)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should throw error 412 when naam and beschrijving is non-existent', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+    })
+      .end((err, res) => {
+        res.should.have.status(412)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(412)
         error.should.have.property('datetime')
         done()
       })
@@ -262,7 +312,7 @@ describe('Edit a category', () => {
             }
         })
 })
-it('should throw 422 when naam has an invalid type', (done) => {
+it('should throw 412 when naam has an invalid type', (done) => {
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -281,17 +331,17 @@ it('should throw 422 when naam has an invalid type', (done) => {
               'beschrijving': "Deze categorie is aangepast door de test"
              })
              .end((err, res) => {
-               res.should.have.status(422)
+               res.should.have.status(412)
                const error = res.body
                error.should.have.property('message')
-               error.should.have.property('code').equals(422)
+               error.should.have.property('code').equals(412)
                error.should.have.property('datetime')
                done()
              })
           }
       })
 })
-it('should throw 422 when beschrijving has an invalid type', (done) => {
+it('should throw 412 when beschrijving has an invalid type', (done) => {
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -310,14 +360,17 @@ it('should throw 422 when beschrijving has an invalid type', (done) => {
               'beschrijving': 12345
              })
              .end((err, res) => {
-               res.should.have.status(422)
-               res.body.should.be.a('object')
+               res.should.have.status(412)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(412)
+               error.should.have.property('datetime')
                done()
              })
           }
       })
 })
-it('should throw 422 when beschrijving and naam have an invalid type', (done) => {
+it('should throw 412 when beschrijving and naam have an invalid type', (done) => {
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -336,8 +389,94 @@ it('should throw 422 when beschrijving and naam have an invalid type', (done) =>
               'beschrijving': 12345
              })
              .end((err, res) => {
-               res.should.have.status(422)
-               res.body.should.be.a('object')
+               res.should.have.status(412)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(412)
+               error.should.have.property('datetime')
+               done()
+             })
+          }
+      })
+})
+it('should throw 412 when naam is non-existant', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+              'beschrijving': 12345
+             })
+             .end((err, res) => {
+               res.should.have.status(412)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(412)
+               error.should.have.property('datetime')
+               done()
+             })
+          }
+      })
+})
+it('should throw 412 when beschrijving is non-existant', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+              'naam': 12345
+             })
+             .end((err, res) => {
+               res.should.have.status(412)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(412)
+               error.should.have.property('datetime')
+               done()
+             })
+          }
+      })
+})
+it('should throw 412 when naam and beschrijving is non-existant', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+             })
+             .end((err, res) => {
+               res.should.have.status(412)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(412)
+               error.should.have.property('datetime')
                done()
              })
           }
