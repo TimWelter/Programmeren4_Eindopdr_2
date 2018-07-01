@@ -1,17 +1,17 @@
 const ApiError = require('../models/ApiError')
 const assert = require('assert')
 const db = require('../config/db')
-let Category = require('../models/Category')
+const Category = require('../models/Category')
+let category
 
 
 module.exports = {
 
     addCategory(req, res, next) {
-
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
-            Category = new Category(req.body.naam, req.body.beschrijving)
+            category = new Category(req.body.naam, req.body.beschrijving)
         } catch (ex) {
             const error = new ApiError(ex.toString(), 422)
             next(error)
@@ -19,7 +19,7 @@ module.exports = {
         }
 
         try {
-            db.query('INSERT INTO `categorie` (`Naam`, `Beschrijving`, UserID) VALUES (?,?,?)', [Category.getName(), Category.getDescription(), req.user.id],
+            db.query('INSERT INTO `categorie` (`Naam`, `Beschrijving`, UserID) VALUES (?,?,?)', [category.getName(), category.getDescription(), req.user.id],
                 (err, rows, fields) => {
                     if (err) {
                         const error = new ApiError(err.toString(), 412)
@@ -105,7 +105,7 @@ module.exports = {
             assert(req.user && req.user.id, 'User ID is missing!')
             assert(req.params.IDCategory, 'ID is missing!')
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
-            Category = new Category(req.body.naam, req.body.beschrijving)
+            category = new Category(req.body.naam, req.body.beschrijving)
         } catch (ex) {
             const error = new ApiError(ex.toString(), 500)
             next(error)
@@ -137,7 +137,7 @@ module.exports = {
                             } else {
                                 //  - zo ja, dan SQL query UPDATE
                                 db.query(
-                                    'UPDATE categorie SET Naam = ?, Beschrijving = ? WHERE ID = ?', [Category.getName(), Category.getDescription(), req.params.IDCategory],
+                                    'UPDATE categorie SET Naam = ?, Beschrijving = ? WHERE ID = ?', [category.getName(), category.getDescription(), req.params.IDCategory],
                                     (err, rows, fields) => {
                                         if (err) {
                                             // handle error
