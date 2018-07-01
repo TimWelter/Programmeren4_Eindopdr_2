@@ -9,7 +9,7 @@ const authController = require('./controllers/authentication.controller')
 const ApiError = require('./models/ApiError')
 const settings = require('./config/config')
 
-const port = settings.webPort
+const port = process.env.PORT || settings.webPort
 
 let app = express()
 

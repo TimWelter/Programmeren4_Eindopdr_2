@@ -26,10 +26,10 @@ module.exports = {
                         const error = new ApiError(err.toString(), 412)
                         next(error);
                     } else {
-                        //Doesnt Give Correct Response Yet
-                        res.status(200).json({
-                            status: rows
-                        }).end()
+                        let categoryResponse = new CategoryResponse(rows.insertId, category.getName(), category.getDescription(), req.user.name, req.user.user)
+                        res.status(200).json(
+                            categoryResponse.getResponse()
+                        ).end()
                     }
                 })
         } catch (ex) {
@@ -50,6 +50,9 @@ module.exports = {
                     if (err) {
                         const error = new ApiError(err, 412)
                         next(error);
+                    } else if (rows.length === 0) {
+                        const error = new ApiError("Geen categorieen gevonden", 404)
+                        next(error)
                     } else {
                         res.status(200).json({
                             categories: rows
@@ -220,7 +223,7 @@ module.exports = {
                                         } else {
                                             // handle success
                                             res.status(200).json({
-                                                status: 'Category deleted'
+                                                status: 'Item deleted'
                                             }).end()
                                         }
                                     })

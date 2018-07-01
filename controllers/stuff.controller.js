@@ -27,7 +27,7 @@ module.exports = {
                             const error = new ApiError(err.toString(), 412)
                             next(error);
                         } else {
-                            stuffResponse = new StuffResponse(ID, stuff.getName(), stuff.getDescription(), stuff.getBrand(), stuff.getKind(), stuff.getYear())
+                            stuffResponse = new StuffResponse(rows.insertId, stuff.getName(), stuff.getDescription(), stuff.getBrand(), stuff.getKind(), stuff.getYear())
                             res.status(200).json(
                                 stuffResponse.getResponse()
                             ).end()
@@ -51,6 +51,9 @@ module.exports = {
                         if (err) {
                             const error = new ApiError(err, 412)
                             next(error);
+                        } else if (rows.length === 0) {
+                            const error = new ApiError("Geen spullen gevonden", 404)
+                            next(error)
                         } else {
                             res.status(200).json({
                                 result: rows
