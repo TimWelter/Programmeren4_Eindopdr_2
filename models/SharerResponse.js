@@ -9,7 +9,7 @@ class SharerResponse {
     getResponse(){
         let response = {
             voornaam: this.firstName,
-            achternaam: this.lastname,
+            achternaam: this.lastName,
             email: this.email
         }
         return response
