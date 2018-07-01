@@ -26,7 +26,7 @@ module.exports = {
                         const error = new ApiError(err.toString(), 412)
                         next(error);
                     } else {
-                        //Doesnt Give Correct Response Yet
+                        let categoryResponse = new CategoryResponse(rows[0].insertedId, category.getName(), category.getDescription(), req.user.name, req.user.user)
                         res.status(200).json({
                             status: rows
                         }).end()
@@ -220,7 +220,7 @@ module.exports = {
                                         } else {
                                             // handle success
                                             res.status(200).json({
-                                                status: 'Category deleted'
+                                                status: 'Item deleted'
                                             }).end()
                                         }
                                     })
