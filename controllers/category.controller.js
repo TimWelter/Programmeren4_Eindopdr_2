@@ -114,7 +114,7 @@ module.exports = {
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
             category = new Category(req.body.naam, req.body.beschrijving)
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 500)
+            const error = new ApiError(ex.toString(), 422)
             next(error)
             return
         }
@@ -209,7 +209,7 @@ module.exports = {
                             // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
                                 //  - zo nee, error
-                                const error = new ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
+                                const error = new    ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
                                 next(error);
                             } else {
                                 //  - zo ja, dan SQL query UPDATE

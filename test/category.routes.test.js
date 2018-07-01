@@ -262,7 +262,87 @@ describe('Edit a category', () => {
             }
         })
 })
-  
+it('should throw 422 when naam has an invalid type', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+              'naam': 12345,
+              'beschrijving': "Deze categorie is aangepast door de test"
+             })
+             .end((err, res) => {
+               res.should.have.status(422)
+               const error = res.body
+               error.should.have.property('message')
+               error.should.have.property('code').equals(422)
+               error.should.have.property('datetime')
+               done()
+             })
+          }
+      })
+})
+it('should throw 422 when beschrijving has an invalid type', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+              'naam': "testCategorieAangepast",
+              'beschrijving': 12345
+             })
+             .end((err, res) => {
+               res.should.have.status(422)
+               res.body.should.be.a('object')
+               done()
+             })
+          }
+      })
+})
+it('should throw 422 when beschrijving and naam have an invalid type', (done) => {
+  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+          if (err) {
+            
+              const error = new ApiError(err, 412)
+              next(error);
+          } else {
+             let categoryToBeEdited = rows[0]
+             let IdToBeEdited = categoryToBeEdited.ID
+
+             chai.request(server)
+             .put(endpoint+"/"+IdToBeEdited)
+             .set('x-access-token', token)
+             .send({
+              'naam': 12345,
+              'beschrijving': 12345
+             })
+             .end((err, res) => {
+               res.should.have.status(422)
+               res.body.should.be.a('object')
+               done()
+             })
+          }
+      })
+})
 })
 describe('Delete a category', () => {
   it('should throw 401 when no token is provided', (done) => {
