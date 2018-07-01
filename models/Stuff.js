@@ -10,7 +10,7 @@ class Stuff {
             assert(typeof(kind) === 'string', "Kind must be a string")
             assert(typeof(year) === 'number', "Year must be a number")
         } catch (ex) {
-            throw(new ApiError(ex.toString(), 422))
+            throw(new ApiError(ex.toString(), 412))
         }
 
         this.name = name

@@ -14,7 +14,7 @@ module.exports = {
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
             category = new Category(req.body.naam, req.body.beschrijving)
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 422)
+            const error = new ApiError(ex.message || ex.toString(), ex.code || 412)
             next(error)
             return
         }
@@ -74,7 +74,7 @@ module.exports = {
         try {
             assert(req.params.IDCategory, 'ID is missing!')
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 500)
+            const error = new ApiError(ex.toString(), 401)
             next(error)
             return
         }
@@ -114,7 +114,7 @@ module.exports = {
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
             category = new Category(req.body.naam, req.body.beschrijving)
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 422)
+            const error = new ApiError(ex.message || ex.toString(), ex.code || 412)
             next(error)
             return
         }

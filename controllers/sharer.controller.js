@@ -12,7 +12,7 @@ module.exports = {
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
         } catch (ex) {
-            const error = new ApiError(ex.message || ex.toString(), ex.code || 422)
+            const error = new ApiError(ex.toString(), 401)
             next(error)
             return
         }
@@ -97,7 +97,7 @@ module.exports = {
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 422)
+            const error = new ApiError(ex.toString(), 401)
             next(error)
             return
         }
