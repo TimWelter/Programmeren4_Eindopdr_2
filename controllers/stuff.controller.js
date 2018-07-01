@@ -51,6 +51,9 @@ module.exports = {
                         if (err) {
                             const error = new ApiError(err, 412)
                             next(error);
+                        } else if (rows.length === 0) {
+                            const error = new ApiError("Geen spullen gevonden", 404)
+                            next(error)
                         } else {
                             res.status(200).json({
                                 result: rows
