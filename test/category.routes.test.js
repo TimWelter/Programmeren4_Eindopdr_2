@@ -1,6 +1,7 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const server = require('../server')
+const db = require('../config/db')
 const assert = require('assert');
 const mocha = require('mocha')
 chai.should()
@@ -16,6 +17,10 @@ describe('Get categories', () => {
       .get(endpoint)
       .end((err, res) => {
         res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
         done()
       })
 
@@ -26,6 +31,10 @@ describe('Get categories', () => {
       .set('x-access-token', wrongToken)
       .end((err, res) => {
         res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
         done()
       })
 
@@ -49,6 +58,10 @@ describe('Get specific categories', () => {
       .get(endpoint + "/1")
       .end((err, res) => {
         res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
         done()
       })
   })
@@ -58,6 +71,10 @@ describe('Get specific categories', () => {
       .set('x-access-token', wrongToken)
       .end((err, res) => {
         res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
         done()
       })
 
@@ -80,12 +97,84 @@ describe('Get specific categories', () => {
   })
   it('should return status 404 when an invalid ID was provided', (done) => {
     chai.request(server)
-      .get(endpoint+"/99999")
+      .get(endpoint + "/99999")
       .set('x-access-token', token)
       .end((err, res) => {
         res.should.have.status(404)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(404)
+        error.should.have.property('datetime')
         done()
       })
 
+  })
+})
+describe('Add a category', () => {
+  it('should throw 401 when no token is provided', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  }) 
+  it('should throw 401 when a wrong token is provided', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', wrongToken)
+      .end((err, res) => {
+        res.should.have.status(401)
+        const error = res.body
+        error.should.have.property('message')
+        error.should.have.property('code').equals(401)
+        error.should.have.property('datetime')
+        done()
+      })
+
+  })
+  it('should return status 200 when a correct token is provided, and naam and beschrijving are valid', (done) => {
+    chai.request(server)
+      .post(endpoint)
+      .set('x-access-token', token)
+      .send({
+        'naam': 'testCategorie',
+        'beschrijving': 'Deze categorie is gemaakt door de test'
+    })
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.be.a('object')
+        done()
+      })
+
+  })
+
+})
+describe('Delete a category', () => {
+  it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
+      db.query('SELECT * FROM categorie ORDER BY ID DESC',
+          (err, rows, fields) => {
+              if (err) {
+                  const error = new ApiError(err, 412)
+                  next(error);
+              } else {
+                 let categoryToBeDeleted = rows[0]
+                 let IdToBeDeleted = categoryToBeDeleted.ID
+
+                 chai.request(server)
+                 .delete(endpoint+"/"+IdToBeDeleted)
+                 .set('x-access-token', token)
+                 .end((err, res) => {
+                   res.should.have.status(200)
+                   res.body.should.be.a('object')
+                   done()
+                 })
+              }
+          })
   })
 })
