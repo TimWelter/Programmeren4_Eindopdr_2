@@ -2,6 +2,7 @@ const ApiError = require('../models/ApiError')
 const assert = require('assert')
 const db = require('../config/db')
 const Category = require('../models/Category')
+const CategoryResponse = require('../models/CategoryResponse')
 let category
 
 
@@ -51,7 +52,7 @@ module.exports = {
                         next(error);
                     } else {
                         res.status(200).json({
-                            result: rows
+                            categories: rows
                         }).end()
                     }
                 })
@@ -82,10 +83,10 @@ module.exports = {
                     if (err) {
                         const error = new ApiError(err, 412)
                         next(error);
-                    } else if(rows.length === 0){
-                        const error = new ApiError(err, 404)
+                    } else if (rows.length === 0) {
+                        const error = new ApiError('Niet gevonden (categorieId bestaat niet)', 404)
                         next(error);
-                    }else {
+                    } else {
                         res.status(200).json({
                             result: rows[0]
                         }).end()
@@ -128,14 +129,14 @@ module.exports = {
                         // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
                             // zo nee, dan error 
-                            const error = new ApiError(err, 404)
+                            const error = new ApiError('Niet gevonden (categorieId bestaat niet)', 404)
                             next(error);
                         } else {
                             // zo ja, dan
                             // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
                                 //  - zo nee, error
-                                const error = new ApiError(err, 412)
+                                const error = new ApiError('Conflict (Gebruiker mag deze data niet wijzigen)', 409)
                                 next(error);
                             } else {
                                 //  - zo ja, dan SQL query UPDATE
@@ -148,9 +149,17 @@ module.exports = {
                                             next(error);
                                         } else {
                                             // handle success
-                                            res.status(200).json({
-                                                result: rows
-                                            }).end()
+                                            db.query('SELECT * FROM view_categorie WHERE ID = ?', [req.params.IDCategory],
+                                                (err, rows, fields) => {
+                                                    if(err) {
+                                                        const error = new ApiError(err.toString, 412)
+                                                        next(error)
+                                                    }
+                                                    let categoryResponse = new CategoryResponse(rows[0].ID, category.getName(), category.getDescription(), rows[0].Beheerder, rows[0].Email)
+                                                    res.status(200).json(
+                                                        categoryResponse.getResponse()
+                                                    ).end()
+                                                })
                                         }
                                     })
                             }
@@ -190,14 +199,14 @@ module.exports = {
                         // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
                             // zo nee, dan error 
-                            const error = new ApiError(err, 404)
+                            const error = new ApiError('Niet gevonden (categorieId bestaat niet)', 404)
                             next(error);
                         } else {
                             // zo ja, dan
                             // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
                                 //  - zo nee, error
-                                const error = new ApiError(err, 412)
+                                const error = new ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
                                 next(error);
                             } else {
                                 //  - zo ja, dan SQL query UPDATE
@@ -211,7 +220,7 @@ module.exports = {
                                         } else {
                                             // handle success
                                             res.status(200).json({
-                                                result: rows
+                                                status: 'Category deleted'
                                             }).end()
                                         }
                                     })
