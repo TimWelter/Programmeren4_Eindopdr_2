@@ -129,7 +129,7 @@ module.exports = {
             registerInfo = new UserRegister(req.body.firstname, req.body.lastname, req.body.email, req.body.password)
         } catch (ex) {
             const error = new ApiError(ex.message, ex.code)
-            res.status(422)
+            res.status(412)
             next(error)
             return
         }
