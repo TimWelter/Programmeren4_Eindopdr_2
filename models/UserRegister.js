@@ -9,7 +9,7 @@ class UserRegister {
             assert(typeof(email) === 'string', 'Not a valid email')
             assert(typeof(password) === 'string', "Password must be a string")
         } catch (ex) {
-            throw(new ApiError(ex.toString(), 422))
+            throw(new ApiError(ex.toString(), 412))
         }
         
         this.firstName = firstName
