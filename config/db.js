@@ -2,17 +2,10 @@ var mysql = require('mysql');
 var config = require('../config/config');
 
 const connectionSettings = {
-    // host: process.env.DB_HOST || config.dbHost,
-    // user: process.env.DB_USER || config.dbUser,
-    // password: process.env.DB_PASSWORD || config.secretkey,
-    // database: process.env.DB_DATABASE || config.dbDatabase,
-    // port: 3306,
-    // debug: false
-
-    host: config.dbHost,
-    user: config.dbUser,
-    password: config.dbPassword,
-    database: config.dbDatabase,
+    host: process.env.DB_HOST || config.dbHost,
+    user: process.env.DB_USER || config.dbUser,
+    password: process.env.DB_PASSWORD || config.dbPassword,
+    database: process.env.DB_DATABASE || config.dbDatabase,
     port: 3306,
     debug: false
 }

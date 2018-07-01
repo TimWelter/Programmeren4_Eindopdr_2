@@ -96,7 +96,9 @@ module.exports = {
                     // Create an object containing the data we want in the payload.
                     const payload = {
                         user: rows[0].Email,
-                        role: 'admin, user'
+                        role: 'spullendelenuser',
+                        id: rows[0].ID,
+                        name: rows[0].Voornaam + " " + rows[0].Achternaam
                     }
                     // User info returned to the caller.
                     let tokenResponse = new ValidToken(auth.encodeToken(payload), loginInfo.getEmail())
