@@ -7,7 +7,6 @@ const mocha = require('mocha')
 chai.should()
 chai.use(chaiHttp)
 const endpoint = '/api/category'
-let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzEzMDk3NzgsImlhdCI6MTUzMDQ0NTc3OCwic3ViIjp7InVzZXIiOiJuaWV0dmVyd2lqZGVyZW5AZ21haWwuY29tIiwicm9sZSI6InNwdWxsZW5kZWxlbnVzZXIiLCJpZCI6NCwibmFtZSI6IlRlc3QgYm90In19.vnMDpHeBhVShBarmbAfVihGxMK6vsGdH4ui6pAcjQQc"
 let wrongToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzEzMDk3NzgsImlhdCI6MTUzMDQ0NTc3OCwic3ViIjp7InVzZXIiOiJuaWV0dmVyd2lqZGVyZW5AZ21haWwuY29tIiwicm9sZSI6InNwdWxsZW5kZWxlbnVzZXIiLCJpZCI6NCwibmFtZSI6IlRlc3QgYm90In19.vnMDpHeBhVShBarmbAfVihGxMK6vsGdH4ui6pAcjQQk"
 
 
@@ -40,6 +39,7 @@ describe('Get categories', () => {
 
   })
   it('should return status 200 when a correct token is provided', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .get(endpoint)
       .set('x-access-token', token)
@@ -80,6 +80,7 @@ describe('Get specific categories', () => {
 
   })
   it('should return status 200 when a correct token is provided and category ID exists', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .get(endpoint + "/1")
       .set('x-access-token', token)
@@ -96,6 +97,7 @@ describe('Get specific categories', () => {
 
   })
   it('should return status 404 when an invalid ID was provided', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .get(endpoint + "/99999")
       .set('x-access-token', token)
@@ -139,6 +141,7 @@ describe('Add a category', () => {
 
   })
   it('should return status 200 when a correct token is provided, and naam and beschrijving are valid', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -154,6 +157,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when naam has an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -172,6 +176,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when beschrijving has an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -190,6 +195,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when naam and beschrijving have an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -208,6 +214,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when naam is non-existent', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -225,6 +232,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when beschrijving is non-existent', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -242,6 +250,7 @@ describe('Add a category', () => {
 
   })
   it('should throw error 412 when naam and beschrijving is non-existent', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
@@ -287,6 +296,7 @@ describe('Edit a category', () => {
 
   })
   it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
+    const token = require('./authentication.routes.test').validToken
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
         (err, rows, fields) => {
             if (err) {
@@ -313,6 +323,7 @@ describe('Edit a category', () => {
         })
 })
 it('should throw 412 when naam has an invalid type', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -342,6 +353,7 @@ it('should throw 412 when naam has an invalid type', (done) => {
       })
 })
 it('should throw 412 when beschrijving has an invalid type', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -371,6 +383,7 @@ it('should throw 412 when beschrijving has an invalid type', (done) => {
       })
 })
 it('should throw 412 when beschrijving and naam have an invalid type', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -400,6 +413,7 @@ it('should throw 412 when beschrijving and naam have an invalid type', (done) =>
       })
 })
 it('should throw 412 when naam is non-existant', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -428,6 +442,7 @@ it('should throw 412 when naam is non-existant', (done) => {
       })
 })
 it('should throw 412 when beschrijving is non-existant', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -456,6 +471,7 @@ it('should throw 412 when beschrijving is non-existant', (done) => {
       })
 })
 it('should throw 412 when naam and beschrijving is non-existant', (done) => {
+  const token = require('./authentication.routes.test').validToken
   db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
           if (err) {
@@ -513,6 +529,7 @@ describe('Delete a category', () => {
   })
 
   it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
+    const token = require('./authentication.routes.test').validToken
       db.query('SELECT * FROM categorie ORDER BY ID DESC',
           (err, rows, fields) => {
               if (err) {
@@ -534,7 +551,9 @@ describe('Delete a category', () => {
               }
           })
   })
+
   it('should return status 404 when an invalid ID was provided', (done) => {
+    const token = require('./authentication.routes.test').validToken
     chai.request(server)
       .delete(endpoint + "/99999")
       .set('x-access-token', token)

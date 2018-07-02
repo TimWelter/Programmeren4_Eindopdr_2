@@ -31,7 +31,7 @@ module.exports = {
         auth.decodeToken(token, (err, payload) => {
             if (err) {
                 // Invalid token
-                const error = new ApiError(err.message || err, 412)
+                const error = new ApiError(	'Niet geautoriseerd (geen valid token)', 401)
                 next(error)
             } else {
                 console.log('Authenticated! Payload = ')

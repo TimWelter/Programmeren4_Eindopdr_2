@@ -23,6 +23,11 @@ describe('Register user', () => {
                 const body = res.body
                 body.should.have.property('token')
                 body.should.have.property('email')
+
+                validToken = res.body.token
+                module.exports = {
+                    validToken
+                }
                 done()
             })
     })
