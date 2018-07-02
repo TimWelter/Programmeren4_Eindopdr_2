@@ -17,3 +17,5 @@ class Sharer {
         return this.spullenId
     }
 }
+
+module.exports = Sharer
