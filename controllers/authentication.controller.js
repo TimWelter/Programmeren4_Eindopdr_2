@@ -31,7 +31,7 @@ module.exports = {
         auth.decodeToken(token, (err, payload) => {
             if (err) {
                 // Invalid token
-                const error = new ApiError(err.message || err, 401)
+                const error = new ApiError(	'Niet geautoriseerd (geen valid token)', 401)
                 next(error)
             } else {
                 console.log('Authenticated! Payload = ')
@@ -89,7 +89,7 @@ module.exports = {
         }
         db.query(query, (error, rows, fields) => {
             if (error) {
-                next(new ApiError(error, 401));
+                next(new ApiError(error, 412));
             } else {
                 if (rows.length !== 0 && loginInfo.getPassword() === rows[0].Password) {
                     // console.log('passwords DID match, sending valid token')
@@ -129,7 +129,7 @@ module.exports = {
             registerInfo = new UserRegister(req.body.firstname, req.body.lastname, req.body.email, req.body.password)
         } catch (ex) {
             const error = new ApiError(ex.message, ex.code)
-            res.status(422)
+            res.status(412)
             next(error)
             return
         }
@@ -146,7 +146,7 @@ module.exports = {
                 }
                 db.query(query, (error, rows) => {
                     if (error) {
-                        next(new ApiError(error, 401))
+                        next(new ApiError(error, 412))
                     } else {
                         console.log("added user")
                     }

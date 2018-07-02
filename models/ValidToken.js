@@ -6,8 +6,8 @@ class ValidToken {
 
     getResponse() {
         let response = {
-            Token: this.token,
-            Email: this.email
+            token: this.token,
+            email: this.email
         }
         return response
     }

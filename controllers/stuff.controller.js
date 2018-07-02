@@ -15,7 +15,7 @@ module.exports = {
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
             stuff = new Stuff(req.body.naam, req.body.beschrijving, req.body.merk, req.body.soort, req.body.bouwjaar)
         } catch (ex) {
-            const error = new ApiError(ex.message || ex.toString()  , ex.code || 422)
+            const error = new ApiError(ex.message || ex.toString()  , ex.code || 412)
             next(error)
             return
         }
@@ -107,7 +107,7 @@ module.exports = {
             assert(typeof (req.body) === 'object', 'request body must have an object containing naam and adres.')
             stuff = new Stuff(req.body.naam, req.body.beschrijving, req.body.merk, req.body.soort, req.body.bouwjaar)
         } catch (ex) {
-            const error = new ApiError(ex.message || ex.toString(), ex.code || 500)
+            const error = new ApiError(ex.message || ex.toString(), ex.code || 412)
             next(error)
             return
         }
@@ -169,7 +169,7 @@ module.exports = {
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
         } catch (ex) {
-            const error = new ApiError(ex.toString(), 500)
+            const error = new ApiError(ex.toString(), 401)
             next(error)
             return
         }
