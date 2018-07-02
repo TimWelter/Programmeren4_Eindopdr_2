@@ -1,6 +1,7 @@
 const ApiError = require('../models/ApiError')
 const assert = require('assert')
 const db = require('../config/db')
+const Sharer = require('../models/Sharer')
 const SharerResponse = require('../models/SharerResponse')
 
 
@@ -11,6 +12,7 @@ module.exports = {
         let stuff
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
+            let sharer = Sharer(req.user.id, req.params.IDCategory, req.params.IDSpullen)
         } catch (ex) {
             const error = new ApiError(ex.toString(), 401)
             next(error)
@@ -28,7 +30,7 @@ module.exports = {
                         const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet)', 404)
                         next(error);
                     } else {
-                        db.query('SELECT * FROM delers WHERE UserID = ? AND categorieID = ? AND spullenID = ?', [req.user.id, req.params.IDCategory, req.params.IDSpullen],
+                        db.query('SELECT * FROM delers WHERE UserID = ? AND categorieID = ? AND spullenID = ?', [sharer.getUserId(), sharer.getCategoryId(), sharer.getSpullenId()],
                             (err, rows, fields) => {
                                 if (err) {
                                     const error = new ApiError(err.toString(), 412)
@@ -37,13 +39,13 @@ module.exports = {
                                     const error = new ApiError("U bent al deler van dit item", 409)
                                     next(error)
                                 } else {
-                                    db.query('INSERT INTO `delers` (`UserID`, `categorieID`, spullenID) VALUES (?,?,?)', [req.user.id, req.params.IDCategory, req.params.IDSpullen],
+                                    db.query('INSERT INTO `delers` (`UserID`, `categorieID`, spullenID) VALUES (?,?,?)', [sharer.getUserId(), sharer.getCategoryId(), sharer.getSpullenId()],
                                         (err, rows, fields) => {
                                             if (err) {
                                                 const error = new ApiError(err.toString(), 412)
                                                 next(error);
                                             } else {
-                                                db.query('SELECT Voornaam, Achternaam, Email FROM view_delers WHERE categorieID = ? AND spullenID = ? AND Email = ?', [req.params.IDCategory, req.params.IDSpullen, req.user.user],
+                                                db.query('SELECT Voornaam, Achternaam, Email FROM view_delers WHERE categorieID = ? AND spullenID = ? AND Email = ?', [sharer.getCategoryId(), sharer.getSpullenId(), req.user.user],
                                                     (err, rows, fields) => {
                                                         let sharerResponse = new SharerResponse(rows[0].Voornaam, rows[0].Achternaam, rows[0].Email)
                                                         res.status(200).json(
