@@ -18,5 +18,5 @@ class CategoryResponse {
         return response
     }
 }
- 
-    module.exports = CategoryResponse
+
+module.exports = CategoryResponse

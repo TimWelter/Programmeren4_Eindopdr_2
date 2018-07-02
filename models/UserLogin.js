@@ -4,10 +4,10 @@ const ApiError = require('../models/ApiError')
 class UserLogin {
     constructor(email, password) {
         try {
-            assert(typeof(email) === 'string', "Not a valid email")
-            assert(typeof(password) === 'string', "Password must be a string")
+            assert(typeof (email) === 'string', "Not a valid email")
+            assert(typeof (password) === 'string', "Password must be a string")
         } catch (ex) {
-            throw(new ApiError(ex.toString(), 412))
+            throw (new ApiError(ex.toString(), 412))
         }
 
         this.email = email

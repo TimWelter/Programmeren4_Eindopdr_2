@@ -26,7 +26,6 @@ module.exports = {
                         const error = new ApiError(err, 412)
                         next(error);
                     } else if (rows.length !== 1) {
-                        // zo nee, dan error 
                         const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet)', 404)
                         next(error);
                     } else {
@@ -66,10 +65,6 @@ module.exports = {
         }
     },
 
-    /**
-     * Haal alle items op voor de user met gegeven id. 
-     * De user ID zit in het request na validatie! 
-     */
     getSharers(req, res, next) {
         try {
             db.query('SELECT Voornaam, Achternaam, Email FROM view_delers WHERE categorieID = ? AND spullenID = ?', [req.params.IDCategory, req.params.IDSpullen],
@@ -77,7 +72,7 @@ module.exports = {
                     if (err) {
                         const error = new ApiError(err, 412)
                         next(error);
-                    } else if(rows.length < 1) {
+                    } else if (rows.length < 1) {
                         const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet of er zijn geen delers gevonden)', 404)
                         next(error)
                     } else {
@@ -92,10 +87,9 @@ module.exports = {
             next(error);
         }
     },
-   
+
     deleteSharer(req, res, next) {
 
-        // req moet de juiste attributen hebben - het nieuwe studentenhuis
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
         } catch (ex) {
@@ -111,28 +105,20 @@ module.exports = {
                         const error = new ApiError(err, 412)
                         next(error);
                     } else {
-                        // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
-                            // zo nee, dan error 
                             const error = new ApiError('Niet gevonden (categorieId of spullenId bestaat niet of er zijn geen delers gevonden)', 404)
                             next(error);
                         } else {
-                            // zo ja, dan
-                            // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
-                                //  - zo nee, error
                                 const error = new ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
                                 next(error);
                             } else {
-                                //  - zo ja, dan SQL query UPDATE
                                 db.query('DELETE FROM delers WHERE UserID = ? AND categorieID = ? AND spullenID = ?', [req.user.id, req.params.IDCategory, req.params.IDSpullen],
                                     (err, rows, fields) => {
                                         if (err) {
-                                            // handle error
                                             const error = new ApiError(err, 412)
                                             next(error);
                                         } else {
-                                            // handle success
                                             res.status(200).json({
                                                 status: 'Deler deleted'
                                             }).end()

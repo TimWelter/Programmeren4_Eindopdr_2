@@ -9,7 +9,7 @@ const connectionSettings = {
     port: 3306,
     debug: false
 }
-const reconnectTimeout = 2000; // ms.
+const reconnectTimeout = 2000;
 
 var connection;
 

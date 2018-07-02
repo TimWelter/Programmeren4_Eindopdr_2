@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 
 app.use(morgan('dev'))
 
-app.use('*', function(req, res, next){
+app.use('*', function (req, res, next) {
 	next()
 })
 
@@ -35,7 +35,7 @@ app.use('*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
 	console.dir(err)
-	res.status((err.code || 404)).json(err).end()	
+	res.status((err.code || 404)).json(err).end()
 })
 
 app.listen(port, () => {

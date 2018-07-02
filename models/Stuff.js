@@ -4,13 +4,13 @@ const ApiError = require('../models/ApiError')
 class Stuff {
     constructor(name, description, brand, kind, year) {
         try {
-            assert(typeof(name) === 'string', "Name must be a string")
-            assert(typeof(description) === 'string', "Description must be a string")
-            assert(typeof(brand) === 'string', "Brand must be a string")
-            assert(typeof(kind) === 'string', "Kind must be a string")
-            assert(typeof(year) === 'number', "Year must be a number")
+            assert(typeof (name) === 'string', "Name must be a string")
+            assert(typeof (description) === 'string', "Description must be a string")
+            assert(typeof (brand) === 'string', "Brand must be a string")
+            assert(typeof (kind) === 'string', "Kind must be a string")
+            assert(typeof (year) === 'number', "Year must be a number")
         } catch (ex) {
-            throw(new ApiError(ex.toString(), 412))
+            throw (new ApiError(ex.toString(), 412))
         }
 
         this.name = name

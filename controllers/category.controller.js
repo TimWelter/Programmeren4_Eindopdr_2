@@ -39,10 +39,6 @@ module.exports = {
         }
     },
 
-    /**
-     * Haal alle items op voor de user met gegeven id. 
-     * De user ID zit in het request na validatie! 
-     */
     getAllCategories(req, res, next) {
         try {
             db.query('SELECT * FROM view_categorie',
@@ -66,10 +62,6 @@ module.exports = {
         }
     },
 
-    /**
-     * Haal alle items op voor de user met gegeven id. 
-     * De user ID zit in het request na validatie! 
-     */
     getCategoryByID(req, res, next) {
         try {
             assert(req.params.IDCategory, 'ID is missing!')
@@ -102,12 +94,7 @@ module.exports = {
         }
     },
 
-    /**
-     * Replace an existing object in the database.
-     */
     editCategoryByID(req, res, next) {
-
-        // req moet de juiste attributen hebben - het nieuwe studentenhuis
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
             assert(req.params.IDCategory, 'ID is missing!')
@@ -118,10 +105,8 @@ module.exports = {
             next(error)
             return
         }
-        // Hier hebben we de juiste body als input.
 
         let ID = req.params.IDCategory
-        // 1. Zoek in db of studentenhuis met huisId bestaat
         try {
             db.query('SELECT * FROM categorie WHERE ID = ?', [ID],
                 (err, rows, fields) => {
@@ -129,32 +114,24 @@ module.exports = {
                         const error = new ApiError(err, 412)
                         next(error);
                     } else {
-                        // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
-                            // zo nee, dan error 
                             const error = new ApiError('Niet gevonden (categorieId bestaat niet)', 404)
                             next(error);
                         } else {
-                            // zo ja, dan
-                            // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
-                                //  - zo nee, error
                                 const error = new ApiError('Conflict (Gebruiker mag deze data niet wijzigen)', 409)
                                 next(error);
                             } else {
-                                //  - zo ja, dan SQL query UPDATE
                                 db.query(
                                     'UPDATE categorie SET Naam = ?, Beschrijving = ? WHERE ID = ?', [category.getName(), category.getDescription(), req.params.IDCategory],
                                     (err, rows, fields) => {
                                         if (err) {
-                                            // handle error
                                             const error = new ApiError(err, 412)
                                             next(error);
                                         } else {
-                                            // handle success
                                             db.query('SELECT * FROM view_categorie WHERE ID = ?', [req.params.IDCategory],
                                                 (err, rows, fields) => {
-                                                    if(err) {
+                                                    if (err) {
                                                         const error = new ApiError(err.toString, 412)
                                                         next(error)
                                                     }
@@ -177,8 +154,6 @@ module.exports = {
     },
 
     deleteCategoryByID(req, res, next) {
-
-        // req moet de juiste attributen hebben - het nieuwe studentenhuis
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
             assert(req.params.IDCategory, 'ID is missing!')
@@ -187,10 +162,8 @@ module.exports = {
             next(error)
             return
         }
-        // Hier hebben we de juiste body als input.
 
         let ID = req.params.IDCategory
-        // 1. Zoek in db of studentenhuis met huisId bestaat
         console.log(req.params.IDCategory)
         try {
             db.query('SELECT * FROM `categorie` WHERE ID = ?', [ID],
@@ -199,29 +172,21 @@ module.exports = {
                         const error = new ApiError(err, 412)
                         next(error);
                     } else {
-                        // rows MOET hier 1 waarde bevatten - nl. de gevonden categorie.
                         if (rows.length !== 1) {
-                            // zo nee, dan error 
                             const error = new ApiError('Niet gevonden (categorieId bestaat niet)', 404)
                             next(error);
                         } else {
-                            // zo ja, dan
-                            // - check eerst of de huidige user de 'eigenaar' van de catagorie is
                             if (rows[0].UserID !== req.user.id) {
-                                //  - zo nee, error
-                                const error = new    ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
+                                const error = new ApiError('Conflict (Gebruiker mag deze data niet verwijderen)', 409)
                                 next(error);
                             } else {
-                                //  - zo ja, dan SQL query UPDATE
                                 db.query(
                                     'DELETE FROM categorie WHERE ID = ?', [req.params.IDCategory],
                                     (err, rows, fields) => {
                                         if (err) {
-                                            // handle error
                                             const error = new ApiError(err, 412)
                                             next(error);
                                         } else {
-                                            // handle success
                                             res.status(200).json({
                                                 status: 'Item deleted'
                                             }).end()

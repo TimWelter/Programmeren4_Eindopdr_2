@@ -20,5 +20,5 @@ class StuffResponse {
         return response
     }
 }
- 
-    module.exports = StuffResponse
+
+module.exports = StuffResponse

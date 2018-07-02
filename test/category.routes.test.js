@@ -141,7 +141,7 @@ describe('Add a category', () => {
         done()
       })
 
-  }) 
+  })
   it('should throw 401 when a wrong token is provided', (done) => {
     chai.request(server)
       .post(endpoint)
@@ -164,7 +164,7 @@ describe('Add a category', () => {
       .send({
         'naam': 'testCategorie',
         'beschrijving': 'Deze categorie is gemaakt door de test'
-    })
+      })
       .end((err, res) => {
         res.should.have.status(200)
         res.body.should.be.a('object')
@@ -180,7 +180,7 @@ describe('Add a category', () => {
       .send({
         'naam': 12345,
         'beschrijving': 'Deze categorie is gemaakt door de test'
-    })
+      })
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -199,7 +199,7 @@ describe('Add a category', () => {
       .send({
         'naam': "testCategorie",
         'beschrijving': 12345
-    })
+      })
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -218,7 +218,7 @@ describe('Add a category', () => {
       .send({
         'naam': 12345,
         'beschrijving': 12345
-    })
+      })
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -236,7 +236,7 @@ describe('Add a category', () => {
       .set('x-access-token', token)
       .send({
         'beschrijving': 'Deze categorie is gemaakt door de test'
-    })
+      })
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -254,7 +254,7 @@ describe('Add a category', () => {
       .set('x-access-token', token)
       .send({
         'naam': "testCategorie"
-    })
+      })
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -270,8 +270,7 @@ describe('Add a category', () => {
     chai.request(server)
       .post(endpoint)
       .set('x-access-token', token)
-      .send({
-    })
+      .send({})
       .end((err, res) => {
         res.should.have.status(412)
         const error = res.body
@@ -286,378 +285,377 @@ describe('Add a category', () => {
 describe('Edit a category', () => {
   it('should throw 401 when no token is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-    (err, rows, fields) => {
+      (err, rows, fields) => {
         if (err) {
-          
-            const error = new ApiError(err, 412)
-            next(error);
-        } else {
-           let categoryToBeEdited = rows[0]
-           let IdToBeEdited = categoryToBeEdited.ID
 
-           chai.request(server)
-           .put(endpoint+"/"+IdToBeEdited)
-           .send({
-            'naam': "testCategorieAangepast",
-            'beschrijving': "Deze categorie is aangepast door de test"
-           })
-           .end((err, res) => {
-             res.should.have.status(401)
-             res.body.should.be.a('object')
-             done()
-           })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .send({
+              'naam': "testCategorieAangepast",
+              'beschrijving': "Deze categorie is aangepast door de test"
+            })
+            .end((err, res) => {
+              res.should.have.status(401)
+              res.body.should.be.a('object')
+              done()
+            })
         }
-    })
+      })
 
   })
   it('should throw 401 when a wrong token is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-        (err, rows, fields) => {
-            if (err) {
-              
-                const error = new ApiError(err, 412)
-                next(error);
-            } else {
-               let categoryToBeEdited = rows[0]
-               let IdToBeEdited = categoryToBeEdited.ID
+      (err, rows, fields) => {
+        if (err) {
 
-               chai.request(server)
-               .put(endpoint+"/"+IdToBeEdited)
-               .set('x-access-token', wrongToken)
-               .send({
-                'naam': "testCategorieAangepast",
-                'beschrijving': "Deze categorie is aangepast door de test"
-               })
-               .end((err, res) => {
-                 res.should.have.status(401)
-                 res.body.should.be.a('object')
-                 done()
-               })
-            }
-        })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', wrongToken)
+            .send({
+              'naam': "testCategorieAangepast",
+              'beschrijving': "Deze categorie is aangepast door de test"
+            })
+            .end((err, res) => {
+              res.should.have.status(401)
+              res.body.should.be.a('object')
+              done()
+            })
+        }
+      })
 
   })
   it('should throw 409 when a different user token is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-        (err, rows, fields) => {
-            if (err) {
-              
-                const error = new ApiError(err, 412)
-                next(error);
-            } else {
-               let categoryToBeEdited = rows[0]
-               let IdToBeEdited = categoryToBeEdited.ID
+      (err, rows, fields) => {
+        if (err) {
 
-               chai.request(server)
-               .put(endpoint+"/"+IdToBeEdited)
-               .set('x-access-token', differentUserToken)
-               .send({
-                'naam': "testCategorieAangepast",
-                'beschrijving': "Deze categorie is aangepast door de test"
-               })
-               .end((err, res) => {
-                 res.should.have.status(409)
-                 res.body.should.be.a('object')
-                 done()
-               })
-            }
-        })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', differentUserToken)
+            .send({
+              'naam': "testCategorieAangepast",
+              'beschrijving': "Deze categorie is aangepast door de test"
+            })
+            .end((err, res) => {
+              res.should.have.status(409)
+              res.body.should.be.a('object')
+              done()
+            })
+        }
+      })
   })
   it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
     const token = require('./authentication.routes.test').validToken
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-        (err, rows, fields) => {
-            if (err) {
-              
-                const error = new ApiError(err, 412)
-                next(error);
-            } else {
-               let categoryToBeEdited = rows[0]
-               let IdToBeEdited = categoryToBeEdited.ID
-
-               chai.request(server)
-               .put(endpoint+"/"+IdToBeEdited)
-               .set('x-access-token', token)
-               .send({
-                'naam': "testCategorieAangepast",
-                'beschrijving': "Deze categorie is aangepast door de test"
-               })
-               .end((err, res) => {
-                 res.should.have.status(200)
-                 res.body.should.be.a('object')
-                 done()
-               })
-            }
-        })
-})
-it('should throw 412 when naam has an invalid type', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
+              'naam': "testCategorieAangepast",
+              'beschrijving': "Deze categorie is aangepast door de test"
+            })
+            .end((err, res) => {
+              res.should.have.status(200)
+              res.body.should.be.a('object')
+              done()
+            })
+        }
+      })
+  })
+  it('should throw 412 when naam has an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+        if (err) {
+
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
               'naam': 12345,
               'beschrijving': "Deze categorie is aangepast door de test"
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+            })
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
-it('should throw 412 when beschrijving has an invalid type', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+  })
+  it('should throw 412 when beschrijving has an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
               'naam': "testCategorieAangepast",
               'beschrijving': 12345
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+            })
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
-it('should throw 412 when beschrijving and naam have an invalid type', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+  })
+  it('should throw 412 when beschrijving and naam have an invalid type', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
               'naam': 12345,
               'beschrijving': 12345
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+            })
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
-it('should throw 412 when naam is non-existant', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+  })
+  it('should throw 412 when naam is non-existant', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
               'beschrijving': 12345
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+            })
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
-it('should throw 412 when beschrijving is non-existant', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+  })
+  it('should throw 412 when beschrijving is non-existant', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({
               'naam': 12345
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+            })
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
-it('should throw 412 when naam and beschrijving is non-existant', (done) => {
-  const token = require('./authentication.routes.test').validToken
-  db.query('SELECT * FROM categorie ORDER BY ID DESC',
+  })
+  it('should throw 412 when naam and beschrijving is non-existant', (done) => {
+    const token = require('./authentication.routes.test').validToken
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
       (err, rows, fields) => {
-          if (err) {
-            
-              const error = new ApiError(err, 412)
-              next(error);
-          } else {
-             let categoryToBeEdited = rows[0]
-             let IdToBeEdited = categoryToBeEdited.ID
+        if (err) {
 
-             chai.request(server)
-             .put(endpoint+"/"+IdToBeEdited)
-             .set('x-access-token', token)
-             .send({
-             })
-             .end((err, res) => {
-               res.should.have.status(412)
-               const error = res.body
-               error.should.have.property('message')
-               error.should.have.property('code').equals(412)
-               error.should.have.property('datetime')
-               done()
-             })
-          }
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeEdited = rows[0]
+          let IdToBeEdited = categoryToBeEdited.ID
+
+          chai.request(server)
+            .put(endpoint + "/" + IdToBeEdited)
+            .set('x-access-token', token)
+            .send({})
+            .end((err, res) => {
+              res.should.have.status(412)
+              const error = res.body
+              error.should.have.property('message')
+              error.should.have.property('code').equals(412)
+              error.should.have.property('datetime')
+              done()
+            })
+        }
       })
-})
+  })
 })
 describe('Delete a category', () => {
   it('should throw 401 when no token is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-          (err, rows, fields) => {
-              if (err) {
-                
-                  const error = new ApiError(err, 412)
-                  next(error);
-              } else {
-                 let categoryToBeDeleted = rows[0]
-                 let IdToBeDeleted = categoryToBeDeleted.ID
+      (err, rows, fields) => {
+        if (err) {
 
-                 chai.request(server)
-                 .delete(endpoint+"/"+IdToBeDeleted)
-                 .end((err, res) => {
-                   res.should.have.status(401)
-                   res.body.should.be.a('object')
-                   done()
-                 })
-              }
-          })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeDeleted = rows[0]
+          let IdToBeDeleted = categoryToBeDeleted.ID
+
+          chai.request(server)
+            .delete(endpoint + "/" + IdToBeDeleted)
+            .end((err, res) => {
+              res.should.have.status(401)
+              res.body.should.be.a('object')
+              done()
+            })
+        }
+      })
 
   })
   it('should throw 401 when a wrong token is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-    (err, rows, fields) => {
+      (err, rows, fields) => {
         if (err) {
-          
-            const error = new ApiError(err, 412)
-            next(error);
-        } else {
-           let categoryToBeDeleted = rows[0]
-           let IdToBeDeleted = categoryToBeDeleted.ID
 
-           chai.request(server)
-           .delete(endpoint+"/"+IdToBeDeleted)
-           .set('x-access-token', wrongToken)
-           .end((err, res) => {
-             res.should.have.status(401)
-             res.body.should.be.a('object')
-             done()
-           })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeDeleted = rows[0]
+          let IdToBeDeleted = categoryToBeDeleted.ID
+
+          chai.request(server)
+            .delete(endpoint + "/" + IdToBeDeleted)
+            .set('x-access-token', wrongToken)
+            .end((err, res) => {
+              res.should.have.status(401)
+              res.body.should.be.a('object')
+              done()
+            })
         }
-    })
+      })
 
   })
   it('should throw 409 when a different user is provided', (done) => {
     db.query('SELECT * FROM categorie ORDER BY ID DESC',
-    (err, rows, fields) => {
+      (err, rows, fields) => {
         if (err) {
-          
-            const error = new ApiError(err, 412)
-            next(error);
-        } else {
-           let categoryToBeDeleted = rows[0]
-           let IdToBeDeleted = categoryToBeDeleted.ID
 
-           chai.request(server)
-           .delete(endpoint+"/"+IdToBeDeleted)
-           .set('x-access-token', differentUserToken)
-           .end((err, res) => {
-             res.should.have.status(409)
-             res.body.should.be.a('object')
-             done()
-           })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeDeleted = rows[0]
+          let IdToBeDeleted = categoryToBeDeleted.ID
+
+          chai.request(server)
+            .delete(endpoint + "/" + IdToBeDeleted)
+            .set('x-access-token', differentUserToken)
+            .end((err, res) => {
+              res.should.have.status(409)
+              res.body.should.be.a('object')
+              done()
+            })
         }
-    })
+      })
   })
 
   it('should return status 200 when a correct token is provided, the author is logged in, and category id is correct', (done) => {
     const token = require('./authentication.routes.test').validToken
-      db.query('SELECT * FROM categorie ORDER BY ID DESC',
-          (err, rows, fields) => {
-              if (err) {
-                
-                  const error = new ApiError(err, 412)
-                  next(error);
-              } else {
-                 let categoryToBeDeleted = rows[0]
-                 let IdToBeDeleted = categoryToBeDeleted.ID
+    db.query('SELECT * FROM categorie ORDER BY ID DESC',
+      (err, rows, fields) => {
+        if (err) {
 
-                 chai.request(server)
-                 .delete(endpoint+"/"+IdToBeDeleted)
-                 .set('x-access-token', token)
-                 .end((err, res) => {
-                   res.should.have.status(200)
-                   res.body.should.be.a('object')
-                   done()
-                 })
-              }
-          })
+          const error = new ApiError(err, 412)
+          next(error);
+        } else {
+          let categoryToBeDeleted = rows[0]
+          let IdToBeDeleted = categoryToBeDeleted.ID
+
+          chai.request(server)
+            .delete(endpoint + "/" + IdToBeDeleted)
+            .set('x-access-token', token)
+            .end((err, res) => {
+              res.should.have.status(200)
+              res.body.should.be.a('object')
+              done()
+            })
+        }
+      })
   })
 
   it('should return status 404 when an invalid ID was provided', (done) => {

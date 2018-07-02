@@ -1,12 +1,12 @@
 class SharerResponse {
 
-    constructor(firstName, lastName, email){
+    constructor(firstName, lastName, email) {
         this.firstName = firstName,
-        this.lastName = lastName,
-        this.email = email
+            this.lastName = lastName,
+            this.email = email
     }
 
-    getResponse(){
+    getResponse() {
         let response = {
             voornaam: this.firstName,
             achternaam: this.lastName,
