@@ -8,7 +8,7 @@ chai.should()
 chai.use(chaiHttp)
 const endpoint = '/api/category'
 let wrongToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzEzMDk3NzgsImlhdCI6MTUzMDQ0NTc3OCwic3ViIjp7InVzZXIiOiJuaWV0dmVyd2lqZGVyZW5AZ21haWwuY29tIiwicm9sZSI6InNwdWxsZW5kZWxlbnVzZXIiLCJpZCI6NCwibmFtZSI6IlRlc3QgYm90In19.vnMDpHeBhVShBarmbAfVihGxMK6vsGdH4ui6pAcjQQk"
-let differentUserToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzEzOTMwNzIsImlhdCI6MTUzMDUyOTA3Miwic3ViIjp7InVzZXIiOiJuaWV0dmVyd2lqZGVyZW4yQGdtYWlsLmNvbSIsInJvbGUiOiJzcHVsbGVuZGVsZW51c2VyIiwiaWQiOjUsIm5hbWUiOiJUZXN0MiBib3QyIn19.MHg8ynHJNISP-SJLi_Y2DfXHbOO5lSTuxGp6NQ39ysA"
+let differentUserToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzEzOTQ2ODksImlhdCI6MTUzMDUzMDY4OSwic3ViIjp7InVzZXIiOiJqc21pdEBzZXJ2ZXIubmwiLCJyb2xlIjoic3B1bGxlbmRlbGVudXNlciIsImlkIjoxLCJuYW1lIjoiSmFuIFNtaXQifX0.Cdy7l8_aW-ySE5TDi4g3ED_4QmGR1HAaqq3nfNWYDeg"
 
 describe('Get categories', () => {
   it('should throw 401 when no token is provided', (done) => {
