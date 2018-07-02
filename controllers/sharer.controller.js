@@ -12,7 +12,7 @@ module.exports = {
         let stuff
         try {
             assert(req.user && req.user.id, 'User ID is missing!')
-            let sharer = Sharer(req.user.id, req.params.IDCategory, req.params.IDSpullen)
+            let sharer = new Sharer(req.user.id, req.params.IDCategory, req.params.IDSpullen)
         } catch (ex) {
             const error = new ApiError(ex.toString(), 401)
             next(error)
